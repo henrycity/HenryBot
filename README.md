@@ -13,7 +13,7 @@ The HenryBot is configurable through environment variables. There are several va
 | Environment variable | Description |
 |----------------------|-------------|
 | `BOT_API_KEY` | this variable is used to specify the API token needed by the bot to connect to your Slack organization |
-| `TRANSLATION_API_KEY` | this variable is used to specify the API key need for the Text Analytics from Microsoft Cognitive API Service|
+| `LANG_API_KEY` | this variable is used to specify the API key need for the Text Analytics from Microsoft Cognitive API Service|
 
 ## Launching the bot from source
 
