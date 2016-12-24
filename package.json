@@ -1,0 +1,39 @@
+{
+  "name": "henrybot",
+  "version": "1.0.0",
+  "description": "Finnish language detection bot.",
+  "keywords": [
+    "Slack",
+    "bot"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tvtri96/henrybot"
+  },
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "author": {
+    "name": "Tri Tran",
+    "email": "tvtri96@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@slack/client": "^3.8.1",
+    "superagent": "^3.3.1"
+  },
+  "devDependencies": {
+    "xo": "^0.5.2"
+  },
+  "xo": {
+    "space": 4,
+    "rules": {
+      "camelcase": [
+        2,
+        {
+          "properties": "never"
+        }
+      ]
+    }
+  }
+}
