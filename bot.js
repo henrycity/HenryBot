@@ -25,7 +25,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                     var isFinnish = (detection.name === "Finnish" && detection.score > 0.8) 
                                     || text.includes('ä') || text.includes('ö');
                     if (isFinnish) {
-                        var random = Math.floor((Math.random() * 100));
+                        var random = Math.floor((Math.random() * 5));
                         var catchpharse = "";
                         switch (random) {
                             case 0:
