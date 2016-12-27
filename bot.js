@@ -25,7 +25,29 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                     var isFinnish = (detection.name === "Finnish" && detection.score > 0.8) 
                                     || text.includes('ä') || text.includes('ö');
                     if (isFinnish) {
-                        rtm.sendMessage("Please speak English!", channel);
+                        var random = Math.floor((Math.random() * 100));
+                        var catchpharse = "";
+                        switch (random) {
+                            case 0:
+                                catchpharse = "Tri is sad. Please speak English! #maketrihappyagain";
+                                break;
+                            case 1:
+                                catchpharse = "Ei? Joo? Argghh, I cannot understand. Can you repeat that in English?";
+                                break;
+                            case 2:
+                                catchpharse = "Tri maybe interested in joining the conversation? Can you say it again in English so that he can understand?";
+                                break;
+                            case 3: 
+                                catchpharse = "Please don't make Tri use Google Translate again :(";
+                                break;
+                            case 4:
+                                catchpharse = "Minä olen Henry. Minä don't speak Finnish.";
+                                break;
+                            default:
+                                catchpharse = "Tri is sad. Please speak English! #maketrihappyagain";
+                                break;
+                        }
+                        rtm.sendMessage(catchpharse, channel);
                     }
                 }
             });
