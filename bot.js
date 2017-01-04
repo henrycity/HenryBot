@@ -22,9 +22,9 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                     console.log("Error", err);
                 } else {
                     var detection = res.body.documents[0].detectedLanguages[0];
-                    var isFinnish = (detection.name === "Finnish" && detection.score > 0.8) 
-                                    || text.includes('ä') || text.includes('ö');
-                    if (isFinnish) {
+                    var isFinnish = (detection.name === "Finnish" && detection.score > 0.8);
+                    var notSimpleFinnish = !text.includes('kiitos') || !text.includes('moi');
+                    if (isFinnish && notSimpleFinnish) {
                         var random = Math.floor((Math.random() * 5));
                         var catchpharse = "";
                         switch (random) {
