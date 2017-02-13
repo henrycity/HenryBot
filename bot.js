@@ -54,7 +54,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                         if (!lastRemindingTime) {
                             lastRemindingTime = new Date();
                         }
-                        let timePassed = Math.abs(currentTime - lastRemindingTime) / (1000 * 60);
+                        let timePassed = Math.abs(currentTime - lastRemindingTime) / (1000 * 60 * 5);
                         let canRemindAgain = timePassed >= 0.5;
                         if (remindingFirstTime || canRemindAgain) {
                             if (thread_ts) {

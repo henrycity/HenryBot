@@ -37,3 +37,7 @@ token.js
 
 #do not commit editor config files
 .idea
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
