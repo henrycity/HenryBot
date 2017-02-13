@@ -11,6 +11,7 @@ let remindingFirstTime = true;
 rtm.on(RTM_EVENTS.MESSAGE, function(data) {
     let channel = data.channel;
     console.log(data);
+    let thread_ts = data.thread_ts;
     if ((channel[0] === 'C' || channel[0] === 'U') && !data.hasOwnProperty('subtype')) {
         let text = data.text;
         let API_URL = 'https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages';
@@ -56,7 +57,17 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                         let timePassed = Math.abs(currentTime - lastRemindingTime) / (1000 * 60);
                         let canRemindAgain = timePassed >= 0.5;
                         if (remindingFirstTime || canRemindAgain) {
-                            rtm.sendMessage(catchpharse, channel);
+                            if (thread_ts) {
+	                            rtm.send({
+		                            text: catchpharse,
+		                            channel: channel,
+		                            thread_ts: thread_ts,
+		                            type: RTM_EVENTS.MESSAGE,
+	                            });
+                            }
+                            else {
+                                rtm.sendMessage(catchpharse, channel);
+                            }
                             remindingFirstTime = false;
                         }
                     }
