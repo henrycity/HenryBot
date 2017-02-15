@@ -26,7 +26,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                 } else {
                     let detection = res.body.documents[0].detectedLanguages[0];
                     let isFinnish = (detection.name === "Finnish" && detection.score > 0.8);
-                    let notSimpleFinnish = !text.includes('kiitos') || !text.includes('moi');
+                    let notSimpleFinnish = !text.includes('kiitos') || !text.includes('moi') || !text.includes('hyvää synttää') || !text.includes('hyvää synttäriä') || !text.includes('hyvää syntymäpäivää') || !text.includes('onnea');
                     if (isFinnish && notSimpleFinnish) {
                         let random = Math.floor((Math.random() * 5));
                         let catchpharse = "";
