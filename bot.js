@@ -4,11 +4,11 @@ const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
 const bot_token = process.env.BOT_API_KEY || '';
 
-let rtm = new RtmClient(bot_token);
+const rtm = new RtmClient(bot_token);
 let lastRemindingTime;
 let remindingFirstTime = true;
 
-rtm.on(RTM_EVENTS.MESSAGE, function(data) {
+rtm.on(RTM_EVENTS.MESSAGE, (data) => {
     const channel = data.channel;
     console.log(data);
     const thread_ts = data.thread_ts;
@@ -20,7 +20,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
             .type('application/json')
             .set('Ocp-Apim-Subscription-Key', process.env.LANG_API_KEY)
             .send(message)
-            .end(function(err, res){
+            .end((err, res) => {
                 if (err || !res.ok) {
                     console.log("Error", err);
                 } else {
@@ -35,27 +35,16 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                     });
                     if (isFinnish && notSimpleFinnish) {
                         const random = Math.floor((Math.random() * 5));
-                        let catchphrase = "";
-                        switch (random) {
-                            case 0:
-                                catchphrase = "Tri is sad. Please speak English! #maketrihappyagain";
-                                break;
-                            case 1:
-                                catchphrase = "Ei? Joo? Argghh, I cannot understand. Can you repeat that in English?";
-                                break;
-                            case 2:
-                                catchphrase = "Tri maybe interested in joining the conversation? Can you say it again in English so that he can understand?";
-                                break;
-                            case 3: 
-                                catchphrase = "Please don't make Tri use Google Translate again :(";
-                                break;
-                            case 4:
-                                catchphrase = "Minä olen Henry. Minä don't speak Finnish.";
-                                break;
-                            default:
-                                catchphrase = "Tri is sad. Please speak English! #maketrihappyagain";
-                                break;
-                        }
+                        const catchphrases = ["Tri is sad. Please speak English! #maketrihappyagain",
+                            "Ei? Joo? Argghh, I cannot understand. Can you repeat that in English?",
+                            "Tri maybe interested in joining the conversation? Can you say it again in English so that he can understand?",
+                            "Please don't make Tri use Google Translate again :slightly_frowning_face:",
+                            "Minä olen Henry. Minä don't speak Finnish.",
+                            "Tri is sad. Please speak English! #maketrihappyagain",
+                            "There is nothing to fear. Henry is hear.",
+                            "Má éo hiểu con mẹ gì hết.",
+                            "Nói tiếng anh dùm cái"];
+                        const reply = catchphrases[random];
                         const currentTime = new Date();
                         if (!lastRemindingTime) {
                             lastRemindingTime = new Date();
@@ -65,14 +54,14 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
                         if (remindingFirstTime || canRemindAgain) {
                             if (thread_ts) {
 	                            rtm.send({
-		                            text: catchphrase,
-		                            channel: channel,
-		                            thread_ts: thread_ts,
+		                            text: reply,
+		                            channel,
+		                            thread_ts,
 		                            type: RTM_EVENTS.MESSAGE,
 	                            });
                             }
                             else {
-                                rtm.sendMessage(catchphrase, channel);
+                                rtm.sendMessage(reply, channel);
                             }
                             remindingFirstTime = false;
                         }
