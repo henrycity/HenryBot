@@ -26,24 +26,24 @@ rtm.on(RTM_EVENTS.MESSAGE, (data) => {
                 } else {
                     const detection = res.body.documents[0].detectedLanguages[0];
                     const isFinnish = (detection.name === "Finnish" && detection.score > 0.8);
-                    const simpleFinnishTerms = ['kiitos', 'moi', 'hyvää synttää', 'hyvää synttäriä', 'hyvää syntymäpäivää', 'onnea'];
+                    const simpleFinnishTerms = ['kiitos', 'moi', 'hyvää', 'onnea', 'hei'];
                     let notSimpleFinnish = true;
                     simpleFinnishTerms.forEach((term) => {
-                        if (text.includes(term)) {
+                        if (text.toLowerCase().includes(term)) {
                             return notSimpleFinnish = false;
                         }
                     });
                     if (isFinnish && notSimpleFinnish) {
-                        const random = Math.floor((Math.random() * 5));
-                        const catchphrases = ["Tri is sad. Please speak English! #maketrihappyagain",
+                        const random = Math.floor((Math.random() * 9));
+                        const catchphrases = ["There is nothing to fear. Henry is hear.",
+                            "Má éo hiểu con mẹ gì hết.",
+                            "Nói tiếng anh dùm cái",
+                            "Tri is sad. Please speak English! #maketrihappyagain",
                             "Ei? Joo? Argghh, I cannot understand. Can you repeat that in English?",
                             "Tri maybe interested in joining the conversation? Can you say it again in English so that he can understand?",
                             "Please don't make Tri use Google Translate again :slightly_frowning_face:",
                             "Minä olen Henry. Minä don't speak Finnish.",
-                            "Tri is sad. Please speak English! #maketrihappyagain",
-                            "There is nothing to fear. Henry is hear.",
-                            "Má éo hiểu con mẹ gì hết.",
-                            "Nói tiếng anh dùm cái"];
+                            "Tri is sad. Please speak English! #maketrihappyagain"];
                         const reply = catchphrases[random];
                         const currentTime = new Date();
                         if (!lastRemindingTime) {
