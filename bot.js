@@ -35,7 +35,7 @@ rtm.on(RTM_EVENTS.MESSAGE, (data) => {
                     });
                     if (isFinnish && notSimpleFinnish) {
                         const random = Math.floor((Math.random() * 9));
-                        const catchphrases = ["There is nothing to fear. Henry is hear.",
+                        const catchphrases = ["There is nothing to fear. Henry is here!",
                             "Má éo hiểu con mẹ gì hết.",
                             "Nói tiếng anh dùm cái",
                             "Tri is sad. Please speak English! #maketrihappyagain",
