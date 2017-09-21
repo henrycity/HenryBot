@@ -4,11 +4,42 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+var translateReply = function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(text, userFirstName) {
+        var translatedTextInEnglish, translatedTextInVN, translatedText;
+        return _regenerator2.default.wrap(function _callee2$(_context2) {
+            while (1) {
+                switch (_context2.prev = _context2.next) {
+                    case 0:
+                        _context2.next = 2;
+                        return translate(text, { to: 'en' });
 
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+                    case 2:
+                        translatedTextInEnglish = _context2.sent.text;
+                        _context2.next = 5;
+                        return translate(text, { to: 'vi' });
+
+                    case 5:
+                        translatedTextInVN = _context2.sent.text;
+                        translatedText = Math.floor(Math.random() * 2) > 0 ? translatedTextInEnglish : translatedTextInVN;
+                        return _context2.abrupt('return', userFirstName + ' said "' + translatedTextInVN + '"');
+
+                    case 8:
+                    case 'end':
+                        return _context2.stop();
+                }
+            }
+        }, _callee2, this);
+    }));
+
+    return function translateReply(_x2, _x3) {
+        return _ref2.apply(this, arguments);
+    };
+}();
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var axios = require('axios');
 var franc = require('franc');
@@ -23,8 +54,8 @@ var lastRemindingTime = void 0;
 var remindingFirstTime = true;
 
 rtm.on(RTM_EVENTS.MESSAGE, function () {
-    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(data) {
-        var channel, thread_ts, user, text, request_url, userFirstName, isFinnish, simpleFinnishTerms, notSimpleFinnish, translatedText, translatedReply, random, catchphrases, reply, currentTime, timePassed, canRemindAgain;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(data) {
+        var channel, thread_ts, user, text, request_url, userFirstName, replyBackInEnglish, translatedReply, reply;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -38,57 +69,32 @@ rtm.on(RTM_EVENTS.MESSAGE, function () {
                         userFirstName = _context.sent.data.user.profile.first_name;
 
                         if (!((channel[0] === 'C' || channel[0] === 'U' || channel[0] === 'G') && !data.hasOwnProperty('subtype'))) {
-                            _context.next = 24;
+                            _context.next = 14;
                             break;
                         }
 
-                        isFinnish = franc(text) === 'fin';
-                        simpleFinnishTerms = ['kiitos', 'moi', 'hyvää', 'onnea', 'hei'];
-                        notSimpleFinnish = true;
-
-                        simpleFinnishTerms.forEach(function (term) {
-                            if (text.toLowerCase().includes(term)) {
-                                return notSimpleFinnish = false;
-                            }
-                        });
-
-                        if (!(isFinnish && notSimpleFinnish)) {
-                            _context.next = 24;
+                        if (!isFinnishAndNotSimple(text)) {
+                            _context.next = 14;
                             break;
                         }
 
-                        _context.next = 13;
-                        return translate(text, { to: 'en' });
+                        replyBackInEnglish = text.length > 20;
+                        _context.next = 10;
+                        return translateReply(text, userFirstName);
 
-                    case 13:
-                        translatedText = _context.sent.text;
-                        translatedReply = userFirstName + ' said "' + translatedText + '"';
-                        random = Math.floor(Math.random() * 5);
-                        catchphrases = ["There is nothing to fear. Henry is here!", "Má éo hiểu con mẹ gì hết.", "Nói tiếng anh dùm cái", "Please don't make Tri use Google Translate again :slightly_frowning_face:", translatedReply];
-                        reply = catchphrases[random];
-                        currentTime = new Date();
+                    case 10:
+                        translatedReply = _context.sent;
+                        reply = catchphrase();
 
-                        if (!lastRemindingTime) {
-                            lastRemindingTime = new Date();
+                        if (isAbleToReply(remindingFirstTime, lastRemindingTime)) {
+                            sendMessage(thread_ts, reply, channel);
+                            remindingFirstTime = false;
                         }
-                        timePassed = Math.abs(currentTime - lastRemindingTime) / (1000 * 60 * 5);
-                        canRemindAgain = timePassed >= 1;
-                        // if (remindingFirstTime || canRemindAgain) {
-
-                        if (thread_ts) {
-                            rtm.send({
-                                text: reply,
-                                channel: channel,
-                                thread_ts: thread_ts,
-                                type: RTM_EVENTS.MESSAGE
-                            });
-                        } else {
-                            rtm.sendMessage(reply, channel);
+                        if (replyBackInEnglish) {
+                            sendMessage(thread_ts, translatedReply, channel);
                         }
-                        remindingFirstTime = false;
-                        // }
 
-                    case 24:
+                    case 14:
                     case 'end':
                         return _context.stop();
                 }
@@ -102,3 +108,44 @@ rtm.on(RTM_EVENTS.MESSAGE, function () {
 }());
 
 rtm.start();
+
+function isFinnishAndNotSimple(text) {
+    var isFinnish = franc(text) === 'fin';
+    var simpleFinnishTerms = ['kiitos', 'moi', 'hyvää', 'onnea', 'hei'];
+    var notSimpleFinnish = true;
+    simpleFinnishTerms.forEach(function (term) {
+        if (text.toLowerCase().includes(term)) {
+            return notSimpleFinnish = false;
+        }
+    });
+    return isFinnish && notSimpleFinnish;
+}
+
+function isAbleToReply(remindingFirstTime, lastRemindingTime) {
+    var currentTime = new Date();
+    if (!lastRemindingTime) {
+        lastRemindingTime = new Date();
+    }
+    var timePassed = Math.abs(currentTime - lastRemindingTime) / (1000 * 60 * 5);
+    var canRemindAgain = timePassed >= 1;
+    return remindingFirstTime || canRemindAgain;
+}
+
+function sendMessage(thread_ts, text, channel) {
+    if (thread_ts) {
+        rtm.send({
+            text: text,
+            channel: channel,
+            thread_ts: thread_ts,
+            type: RTM_EVENTS.MESSAGE
+        });
+    } else {
+        rtm.sendMessage(text, channel);
+    }
+};
+
+function catchphrase() {
+    var random = Math.floor(Math.random() * 3);
+    var catchphrases = ["There is nothing to fear. Henry is here!", "Huhu éo hiểu con mẹ gì hết. :crying_cat_face:", "Please don't make Tri use Google Translate again :slightly_frowning_face:"];
+    return catchphrases[random];
+}

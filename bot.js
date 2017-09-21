@@ -15,46 +15,72 @@ rtm.on(RTM_EVENTS.MESSAGE, async (data) => {
     const request_url = `https://slack.com/api/users.info?token=${user_token}&user=${user}`;
     const userFirstName = (await axios.get(request_url)).data.user.profile.first_name;
     if ((channel[0] === 'C' || channel[0] === 'U' || channel[0] === 'G') && !data.hasOwnProperty('subtype')) {
-        const isFinnish = franc(text) === 'fin';
-        const simpleFinnishTerms = ['kiitos', 'moi', 'hyvää', 'onnea', 'hei'];
-        let notSimpleFinnish = true;
-        simpleFinnishTerms.forEach((term) => {
-            if (text.toLowerCase().includes(term)) {
-                return notSimpleFinnish = false;
-            }
-        });
-        if (isFinnish && notSimpleFinnish) {
-            const translatedText = (await translate(text, {to: 'en'})).text;
-            const translatedReply = `${userFirstName} said "${translatedText}"`;
-            const random = Math.floor((Math.random() * 5));
-            const catchphrases = ["There is nothing to fear. Henry is here!",
-                "Má éo hiểu con mẹ gì hết.",
-                "Nói tiếng anh dùm cái",
-                "Please don't make Tri use Google Translate again :slightly_frowning_face:",
-                translatedReply];
-            const reply = catchphrases[random];
-            const currentTime = new Date();
-            if (!lastRemindingTime) {
-                lastRemindingTime = new Date();
-            }
-            const timePassed = Math.abs(currentTime - lastRemindingTime) / (1000 * 60 * 5);
-            const canRemindAgain = timePassed >= 1;
-            // if (remindingFirstTime || canRemindAgain) {
-                if (thread_ts) {
-                    rtm.send({
-                        text: reply,
-                        channel,
-                        thread_ts,
-                        type: RTM_EVENTS.MESSAGE,
-                    });
-                }
-                else {
-                    rtm.sendMessage(reply, channel);
-                }
+        if (isFinnishAndNotSimple(text)) {
+            const replyBackInEnglish = text.length > 20;
+            const translatedReply = await translateReply(text, userFirstName);
+            const reply = catchphrase();
+            if (isAbleToReply(remindingFirstTime, lastRemindingTime)) {
+                sendMessage(thread_ts, reply, channel);
                 remindingFirstTime = false;
-            // }
+            }
+            if (replyBackInEnglish) {
+                sendMessage(thread_ts, translatedReply, channel);
+            }
         }
     }
 });
 
 rtm.start();
+
+function isFinnishAndNotSimple(text) {
+    const isFinnish = franc(text) === 'fin';
+    const simpleFinnishTerms = ['kiitos', 'moi', 'hyvää', 'onnea', 'hei'];
+    let notSimpleFinnish = true;
+    simpleFinnishTerms.forEach((term) => {
+        if (text.toLowerCase().includes(term)) {
+            return notSimpleFinnish = false;
+        }
+    });
+    return isFinnish && notSimpleFinnish;
+}
+
+function isAbleToReply(remindingFirstTime, lastRemindingTime) {
+    const currentTime = new Date();
+    if (!lastRemindingTime) {
+        lastRemindingTime = new Date();
+    }
+    const timePassed = Math.abs(currentTime - lastRemindingTime) / (1000 * 60 * 5);
+    const canRemindAgain = timePassed >= 1;
+    return remindingFirstTime || canRemindAgain;
+}
+
+function sendMessage(thread_ts, text, channel) {
+    if (thread_ts) {
+        rtm.send({
+            text,
+            channel,
+            thread_ts,
+            type: RTM_EVENTS.MESSAGE,
+        });
+    }
+    else {
+        rtm.sendMessage(text, channel);
+    }
+};
+
+async function translateReply(text, userFirstName) {
+    const translatedTextInEnglish = (await translate(text, {to: 'en'})).text;
+    const translatedTextInVN = (await translate(text, {to: 'vi'})).text;
+    const translatedText = Math.floor((Math.random() * 2)) > 0 ? translatedTextInEnglish : translatedTextInVN;
+    return `${userFirstName} said "${translatedTextInVN}"`;
+}
+
+function catchphrase() {
+    const random = Math.floor((Math.random() * 3));
+    const catchphrases = [
+        "There is nothing to fear. Henry is here!",
+        "Huhu éo hiểu con mẹ gì hết. :crying_cat_face:",
+        "Please don't make Tri use Google Translate again :slightly_frowning_face:",
+    ];
+   return catchphrases[random];
+}
