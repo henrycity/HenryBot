@@ -3,8 +3,8 @@ const franc = require('franc');
 const translate = require('google-translate-api');
 const RtmClient = require('@slack/client').RtmClient;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
-const user_token = process.env.USER_TOKEN || 'xoxp-2443115515-110808892454-244339298004-8ac569b24b3fbfdb87f52192fde62f96';
-const bot_token = process.env.BOT_API_KEY || 'xoxb-120335742129-h45t73HeAzCjesgiTxVSqVaS';
+const user_token = process.env.USER_TOKEN;
+const bot_token = process.env.BOT_API_KEY;
 
 const rtm = new RtmClient(bot_token);
 let lastRemindingTime;
