@@ -11,9 +11,10 @@
     "url": "https://github.com/tvtri96/henrybot"
   },
   "scripts": {
-    "prestart": "babel bot.js -o server.js",
+    "build": "babel bot.js -o server.js",
     "start": "node server.js",
-    "dev": "nodemon bot.js"
+    "dev": "nodemon bot.js",
+    "deploy": "npm run build eb deploy"
   },
   "author": {
     "name": "Tri Tran",
