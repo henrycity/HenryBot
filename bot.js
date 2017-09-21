@@ -71,7 +71,7 @@ function sendMessage(thread_ts, text, channel) {
 async function translateReply(text, userFirstName) {
     const translatedTextInEnglish = (await translate(text, {to: 'en'})).text;
     const translatedTextInVN = (await translate(text, {to: 'vi'})).text;
-    const translatedText = Math.floor((Math.random() * 2)) > 0 ? translatedTextInEnglish : translatedTextInVN;
+    const translatedText = Math.random() > 0.5 ? translatedTextInEnglish : translatedTextInVN;
     return `${userFirstName} said "${translatedTextInVN}"`;
 }
 
