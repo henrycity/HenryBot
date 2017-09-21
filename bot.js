@@ -72,7 +72,7 @@ async function translateReply(text, userFirstName) {
     const translatedTextInEnglish = (await translate(text, {to: 'en'})).text;
     const translatedTextInVN = (await translate(text, {to: 'vi'})).text;
     const translatedText = Math.random() > 0.5 ? translatedTextInEnglish : translatedTextInVN;
-    return `${userFirstName} said "${translatedTextInVN}"`;
+    return `${userFirstName} said "${translatedText}"`;
 }
 
 function catchphrase() {
