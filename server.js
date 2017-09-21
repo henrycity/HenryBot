@@ -21,7 +21,7 @@ var translateReply = function () {
 
                     case 5:
                         translatedTextInVN = _context2.sent.text;
-                        translatedText = Math.floor(Math.random() * 2) > 0 ? translatedTextInEnglish : translatedTextInVN;
+                        translatedText = Math.random() > 0.5 ? translatedTextInEnglish : translatedTextInVN;
                         return _context2.abrupt('return', userFirstName + ' said "' + translatedTextInVN + '"');
 
                     case 8:
