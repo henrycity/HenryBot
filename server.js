@@ -113,14 +113,14 @@ rtm.start();
 
 function isFinnishAndNotSimple(text) {
     var isFinnish = franc(text) === 'fin';
-    var simpleFinnishTerms = ['kiitos', 'moi', 'hyvää', 'onnea', 'hei'];
+    var simpleFinnishTerms = ['kiitos', 'kiitii', 'moi', 'hyvää', 'onnea', 'hei'];
     var notSimpleFinnish = true;
     simpleFinnishTerms.forEach(function (term) {
         if (text.toLowerCase().includes(term)) {
             return notSimpleFinnish = false;
         }
     });
-    return isFinnish && notSimpleFinnish;
+    return isFinnish && (notSimpleFinnish || text.length > 20);
 }
 
 function isAbleToReply(remindingFirstTime, lastRemindingTime) {

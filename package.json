@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "babel bot.js -o server.js",
+    "prestart": "npm run build",
     "start": "node server.js",
     "dev": "nodemon bot.js",
     "deploy": "npm run build && eb deploy"
