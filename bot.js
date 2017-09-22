@@ -34,14 +34,14 @@ rtm.start();
 
 function isFinnishAndNotSimple(text) {
     const isFinnish = franc(text) === 'fin';
-    const simpleFinnishTerms = ['kiitos', 'moi', 'hyvää', 'onnea', 'hei'];
+    const simpleFinnishTerms = ['kiitos', 'kiitii', 'moi', 'hyvää', 'onnea', 'hei'];
     let notSimpleFinnish = true;
     simpleFinnishTerms.forEach((term) => {
         if (text.toLowerCase().includes(term)) {
             return notSimpleFinnish = false;
         }
     });
-    return isFinnish && notSimpleFinnish;
+    return isFinnish && (notSimpleFinnish || text.length > 20);
 }
 
 function isAbleToReply(remindingFirstTime, lastRemindingTime) {
