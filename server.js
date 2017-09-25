@@ -75,7 +75,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function () {
                             break;
                         }
 
-                        if (!isFinnishAndNotSimple(text)) {
+                        if (!isAbleToReply(text)) {
                             _context.next = 14;
                             break;
                         }
@@ -88,7 +88,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function () {
                         translatedReply = _context.sent;
                         reply = catchphrase();
 
-                        if (isAbleToReply(remindingFirstTime, lastRemindingTime)) {
+                        if (isAbleToRemind(remindingFirstTime, lastRemindingTime)) {
                             sendMessage(thread_ts, reply, channel);
                             remindingFirstTime = false;
                         }
@@ -111,7 +111,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function () {
 
 rtm.start();
 
-function isFinnishAndNotSimple(text) {
+function isAbleToReply(text) {
     var isFinnish = franc(text) === 'fin';
     var simpleFinnishTerms = ['kiitos', 'kiitii', 'moi', 'hyvää', 'onnea', 'hei'];
     var notSimpleFinnish = true;
@@ -120,10 +120,14 @@ function isFinnishAndNotSimple(text) {
             return notSimpleFinnish = false;
         }
     });
-    return isFinnish && (notSimpleFinnish || text.length > 20);
+    return isFinnish && (notSimpleFinnish || text.length > 20) && notOnlyHttpLink(text);
 }
 
-function isAbleToReply(remindingFirstTime, lastRemindingTime) {
+function notOnlyHttpLink(text) {
+    return !(text.includes('http') && text.split(' ').length === 1);
+}
+
+function isAbleToRemind(remindingFirstTime, lastRemindingTime) {
     var currentTime = new Date();
     if (!lastRemindingTime) {
         lastRemindingTime = new Date();

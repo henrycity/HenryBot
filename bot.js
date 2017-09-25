@@ -15,15 +15,15 @@ rtm.on(RTM_EVENTS.MESSAGE, async (data) => {
     const request_url = `https://slack.com/api/users.info?token=${user_token}&user=${user}`;
     const userFirstName = (await axios.get(request_url)).data.user.profile.first_name;
     if ((channel[0] === 'C' || channel[0] === 'U' || channel[0] === 'G') && !data.hasOwnProperty('subtype')) {
-        if (isFinnishAndNotSimple(text)) {
-            const replyBackInEnglish = text.length > 20;
+        if (isAbleToReply(text)) {
+            const isAbleToReplyBackInEnglish = text.length > 20;
             const translatedReply = await translateReply(text, userFirstName);
             const reply = catchphrase();
-            if (isAbleToReply(remindingFirstTime, lastRemindingTime)) {
+            if (isAbleToRemind(remindingFirstTime, lastRemindingTime)) {
                 sendMessage(thread_ts, reply, channel);
                 remindingFirstTime = false;
             }
-            if (replyBackInEnglish) {
+            if (isAbleToReplyBackInEnglish) {
                 sendMessage(thread_ts, translatedReply, channel);
             }
         }
@@ -32,7 +32,7 @@ rtm.on(RTM_EVENTS.MESSAGE, async (data) => {
 
 rtm.start();
 
-function isFinnishAndNotSimple(text) {
+function isAbleToReply(text) {
     const isFinnish = franc(text) === 'fin';
     const simpleFinnishTerms = ['kiitos', 'kiitii', 'moi', 'hyvää', 'onnea', 'hei'];
     let notSimpleFinnish = true;
@@ -41,10 +41,14 @@ function isFinnishAndNotSimple(text) {
             return notSimpleFinnish = false;
         }
     });
-    return isFinnish && (notSimpleFinnish || text.length > 20);
+    return isFinnish && (notSimpleFinnish || text.length > 20) && notOnlyHttpLink(text);
 }
 
-function isAbleToReply(remindingFirstTime, lastRemindingTime) {
+function notOnlyHttpLink(text) {
+    return !(text.includes('http') && text.split(' ').length === 1);
+}
+
+function isAbleToRemind(remindingFirstTime, lastRemindingTime) {
     const currentTime = new Date();
     if (!lastRemindingTime) {
         lastRemindingTime = new Date();
