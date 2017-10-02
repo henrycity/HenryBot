@@ -1,4 +1,5 @@
 # HenryBot
+HenryBot detects Finnish text in Slack by using franc and it will translate the text into English or Vietnamese with Google Translate API. It will reply the translated text so that non-Finnish speak can spend less time on Google Translate and help to improve the communication.
 
 ## Getting the API token for your Slack channel
 
@@ -13,7 +14,7 @@ The HenryBot is configurable through environment variables. There are several va
 | Environment variable | Description |
 |----------------------|-------------|
 | `BOT_API_KEY` | this variable is used to specify the API token needed by the bot to connect to your Slack organization |
-| `LANG_API_KEY` | this variable is used to specify the API key need for the Text Analytics from Microsoft Cognitive API Service|
+| `USER_TOKEN` | this variable is used to specify the API token needed for getting the name of the user |
 
 ## Launching the bot from source
 
@@ -23,4 +24,9 @@ If you downloaded the source code of the bot you can run it using NPM with:
 $ npm start
 ```
 
-Don't forget to set your `BOT_API_KEY` and `TRANSLATION_API_KEY` environment variable bedore doing so.
+## Deploy to AWS Elastic Beanstalk
+```bash
+$ npm run deploy
+```
+
+Don't forget to set your `BOT_API_KEY` and `USER_TOKEN` environment variable bedore doing so.
