@@ -11,10 +11,10 @@
     "url": "https://github.com/tvtri96/henrybot"
   },
   "scripts": {
-    "build": "babel bot.js -o server.js",
+    "build": "babel index.js -o server.js",
     "prestart": "npm run build",
     "start": "node server.js",
-    "dev": "nodemon bot.js",
+    "dev": "nodemon index.js",
     "deploy": "npm run build && eb deploy"
   },
   "author": {

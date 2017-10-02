@@ -57,7 +57,7 @@ var remindingFirstTime = true;
 
 rtm.on(RTM_EVENTS.MESSAGE, function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(data) {
-        var channel, thread_ts, user, text, request_url, userFirstName, replyBackInEnglish, translatedReply, reply;
+        var channel, thread_ts, user, text, request_url, userFirstName, isAbleToReplyBackInEnglish, translatedReply, reply;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -80,7 +80,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function () {
                             break;
                         }
 
-                        replyBackInEnglish = text.length > 20;
+                        isAbleToReplyBackInEnglish = text.length > 20;
                         _context.next = 10;
                         return translateReply(text, userFirstName);
 
@@ -92,7 +92,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function () {
                             sendMessage(thread_ts, reply, channel);
                             remindingFirstTime = false;
                         }
-                        if (replyBackInEnglish) {
+                        if (isAbleToReplyBackInEnglish) {
                             sendMessage(thread_ts, translatedReply, channel);
                         }
 
