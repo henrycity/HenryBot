@@ -24,27 +24,15 @@
   "license": "MIT",
   "dependencies": {
     "@slack/client": "^3.8.1",
-    "axios": "^0.16.2",
+    "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
-    "franc": "^3.1.1",
+    "franc": "^4.0.0",
     "google-translate-api": "^2.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-latest": "^6.24.1",
-    "nodemon": "^1.12.1",
-    "xo": "^0.5.2"
-  },
-  "xo": {
-    "space": 4,
-    "rules": {
-      "camelcase": [
-        2,
-        {
-          "properties": "never"
-        }
-      ]
-    }
+    "nodemon": "^1.17.5"
   }
 }
