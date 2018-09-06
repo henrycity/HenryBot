@@ -11,11 +11,11 @@ const rtm = new RtmClient(bot_token);
 rtm.on(RTM_EVENTS.MESSAGE, async (data) => {
     const { channel, thread_ts, user, text } = data;
     const request_url = `https://slack.com/api/users.info?token=${user_token}&user=${user}`;
-    const userFirstName = (await axios.get(request_url)).data.user.profile.first_name;
+    const userFullName = (await axios.get(request_url)).data.user.real_name;
     if ((channel[0] === 'C' || channel[0] === 'U' || channel[0] === 'G') && !data.hasOwnProperty('subtype')) {
         if (isAbleToReply(text)) {
             const isAbleToReplyBackInEnglish = text.length > 20;
-            const translatedReply = await translateReply(text, userFirstName);
+            const translatedReply = await translateReply(text, userFullName);
             if (isAbleToReplyBackInEnglish) {
                 sendMessage(thread_ts, translatedReply, channel);
             }
@@ -56,6 +56,6 @@ function sendMessage(thread_ts, text, channel) {
 };
 
 async function translateReply(text, userFirstName) {
-    const translatedTextInEnglish = (await translate(text, {to: 'en'})).text;
-    return `${userFirstName} said "${translatedTextInEnglish}"`;
+    const [en, ge, es] = await Promise.all([translate(text, {to: 'en'}), translate(text, {to: 'de'}), translate(text, {to: 'es'})]);
+    return `${userFirstName} said "${en.text}". \n ${userFirstName} sagte: "${ge.text}" \n ${userFirstName} dijo: "${es.text}"`;
 }
