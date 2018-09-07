@@ -11,11 +11,11 @@ const rtm = new RtmClient(bot_token);
 rtm.on(RTM_EVENTS.MESSAGE, async (data) => {
     const { channel, thread_ts, user, text } = data;
     const request_url = `https://slack.com/api/users.info?token=${user_token}&user=${user}`;
-    const userFullName = (await axios.get(request_url)).data.user.real_name;
+    const { is_bot, real_name } = (await axios.get(request_url)).data.user;
     if ((channel[0] === 'C' || channel[0] === 'U' || channel[0] === 'G') && !data.hasOwnProperty('subtype')) {
-        if (isAbleToReply(text)) {
+        if (!is_bot && isAbleToReply(text)) {
             const isAbleToReplyBackInEnglish = text.length > 20;
-            const translatedReply = await translateReply(text, userFullName);
+            const translatedReply = await translateReply(text, real_name);
             if (isAbleToReplyBackInEnglish) {
                 sendMessage(thread_ts, translatedReply, channel);
             }
