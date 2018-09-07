@@ -4,28 +4,21 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var translateReply = function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(text, userFirstName) {
-        var _ref3, _ref4, en, ge, es;
-
+        var translatedTextInEnglish;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
                     case 0:
                         _context2.next = 2;
-                        return Promise.all([translate(text, { to: 'en' }), translate(text, { to: 'de' }), translate(text, { to: 'es' })]);
+                        return translate(text, { to: 'en' });
 
                     case 2:
-                        _ref3 = _context2.sent;
-                        _ref4 = _slicedToArray(_ref3, 3);
-                        en = _ref4[0];
-                        ge = _ref4[1];
-                        es = _ref4[2];
-                        return _context2.abrupt('return', userFirstName + ' said "' + en.text + '". \n ' + userFirstName + ' sagte: "' + ge.text + '" \n ' + userFirstName + ' dijo: "' + es.text + '"');
+                        translatedTextInEnglish = _context2.sent.text;
+                        return _context2.abrupt('return', userFirstName + ' said "' + translatedTextInEnglish + '"');
 
-                    case 8:
+                    case 4:
                     case 'end':
                         return _context2.stop();
                 }

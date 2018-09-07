@@ -56,6 +56,6 @@ function sendMessage(thread_ts, text, channel) {
 };
 
 async function translateReply(text, userFirstName) {
-    const [en, ge, es] = await Promise.all([translate(text, {to: 'en'}), translate(text, {to: 'de'}), translate(text, {to: 'es'})]);
-    return `${userFirstName} said "${en.text}". \n ${userFirstName} sagte: "${ge.text}" \n ${userFirstName} dijo: "${es.text}"`;
+    const translatedTextInEnglish = (await translate(text, {to: 'en'})).text;
+    return `${userFirstName} said "${translatedTextInEnglish}"`;
 }
