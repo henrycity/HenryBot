@@ -1,5 +1,6 @@
 const axios = require('axios');
 const franc = require('franc');
+const striptags = require('striptags');
 const translate = require('google-translate-api');
 const RtmClient = require('@slack/client').RtmClient;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
@@ -58,6 +59,6 @@ function sendMessage(thread_ts, text, channel) {
 };
 
 async function translateReply(text, userFirstName) {
-    const translatedTextInEnglish = (await translate(text, {to: 'en'})).text;
+    const translatedTextInEnglish = (await translate(striptags(text), {to: 'en'})).text;
     return `${userFirstName} said "${translatedTextInEnglish}"`;
 }

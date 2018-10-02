@@ -1,5 +1,4 @@
 'use strict';
-var striptags = require('striptags');
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -38,6 +37,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 var axios = require('axios');
 var franc = require('franc');
+var striptags = require('striptags');
 var translate = require('google-translate-api');
 var RtmClient = require('@slack/client').RtmClient;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
