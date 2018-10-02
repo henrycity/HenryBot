@@ -12,7 +12,7 @@ var translateReply = function () {
                 switch (_context2.prev = _context2.next) {
                     case 0:
                         _context2.next = 2;
-                        return translate(text, { to: 'en' });
+                        return translate(striptags(text), { to: 'en' });
 
                     case 2:
                         translatedTextInEnglish = _context2.sent.text;
@@ -37,6 +37,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 var axios = require('axios');
 var franc = require('franc');
+var striptags = require('striptags');
 var translate = require('google-translate-api');
 var RtmClient = require('@slack/client').RtmClient;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
